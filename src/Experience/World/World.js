@@ -3,6 +3,7 @@ import Experience from '../Experience.js'
 import WaterFloor from './WaterFloor.js'
 import PlanktonGroup from './PlanktonGroup.js'
 import Walls from './Walls.js'
+import FallingLeaves from './FallingLeaves.js'
 
 export default class World
 {
@@ -21,6 +22,7 @@ export default class World
             this.waterFloor = new WaterFloor()
             this.PlanktonGroup = new PlanktonGroup()
             //this.Walls = new Walls()
+            this.FallingLeaves = new FallingLeaves()
 
             this.envMap = this.resources.items.skyEnvMap
             this.envMap.mapping = THREE.EquirectangularReflectionMapping
@@ -51,5 +53,7 @@ export default class World
             this.PlanktonGroup.update()
         if (this.Walls)
             this.Walls.update()
+        if (this.FallingLeaves)
+            this.FallingLeaves.update()
     }
 }

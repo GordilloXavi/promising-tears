@@ -55,9 +55,9 @@ export default class Renderer
         
         const unrealBloomPass = new UnrealBloomPass(
             new THREE.Vector2(window.innerWidth, window.innerHeight),
-            0.2, // strength
-            0.05, // radius
-            0.01 // threshold
+            0.25, // strength 0.2
+            0.09, // radius 0.05
+            0.01 // threshold 0.01
         )
         unrealBloomPass.renderToScreen = true
 

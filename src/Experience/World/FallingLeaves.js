@@ -48,9 +48,7 @@ class LeavesModel {
     }
 
     update () {
-        this.mesh.scale.x = Math.abs(Math.sin(this.experience.time.elapsed/1000))/20 + 1
-        this.mesh.scale.y = Math.abs(Math.sin(this.experience.time.elapsed/1000))/20 + 1
-        this.mesh.scale.z = Math.abs(Math.sin(this.experience.time.elapsed/1000))/20 + 1
+        // update animation
     }
 }
 
@@ -59,7 +57,7 @@ export default class FallingLeaves {
         this.experience = new Experience()
         this.resources = this.experience.resources
 
-        const leaves_position = new THREE.Vector3(0, 0, 0)
+        const leaves_position = new THREE.Vector3(0, 0, -20)
 
         const leaves_rotation = new THREE.Euler(0, 0, 0)
 

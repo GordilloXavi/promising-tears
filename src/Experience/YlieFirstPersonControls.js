@@ -41,7 +41,7 @@ export default class YlieFirstPersonControls
     }
 
     lock() {
-        //this.controls.lock()
+        this.controls.lock()
         //this.enterFullscreen()
     }
 
