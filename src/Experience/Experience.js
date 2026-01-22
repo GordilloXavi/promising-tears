@@ -17,7 +17,7 @@ let instance = null
 
 export default class Experience
 {
-    constructor(_canvas, isMobile)
+    constructor(_canvas)
     {
         // Singleton
         if(instance)
@@ -31,10 +31,7 @@ export default class Experience
 
         // Options
         this.canvas = _canvas
-        this.isMobile = isMobile
-        this.state = GameState.LOBBY
-
-        this.setupNameOverlay()
+        this.state = GameState.PLAYING
 
         // Setup
         this.debug = new Debug()
