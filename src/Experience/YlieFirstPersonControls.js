@@ -136,10 +136,7 @@ export default class YlieFirstPersonControls
     }
 
     handleCamaraRotated = (event) => {
-        if (this.controls.isLocked) {
-            // emit player moved with camera.lookat
-            console.log('camera rotated: ', this.camera.rotation)
-        }
+        return
     }
 
     update() {

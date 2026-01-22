@@ -139,7 +139,6 @@ export class Player
                 const currentTime = this.experience.time.elapsed
                 if (!this.lastUpdateTime || currentTime - this.lastUpdateTime >= 50) {
                     this.lastUpdateTime = currentTime
-                    console.log('sending player position')
                 }
             }
         } else if (this.mesh) {
