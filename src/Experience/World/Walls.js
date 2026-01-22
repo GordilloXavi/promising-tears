@@ -5,7 +5,6 @@ class Wall {
     constructor (position, rotation) {
         this.experience = new Experience()
         this.camera = this.experience.camera.instance
-        this.resources = this.experience.resources
 
         this.mesh = this.createMesh()
         this.mesh.position.set(position.x, position.y, position.z)
@@ -13,17 +12,22 @@ class Wall {
     }
 
     createMesh () {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshPhysicalMaterial({
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.2,
-            roughness: 0,
-            metalness: 1,
-            clearcoat: 1.0,
-            clearcoatRoughness: 0.1
-        });
-        const model = new THREE.Mesh(geometry, material);
+        const material = new THREE.MeshPhysicalMaterial()
+        material.color = new THREE.Color(0xffffff)
+        material.metalness = 1
+        material.roughness = 0
+        material.transmission = 1
+        material.ior = 1.6
+        material.thickness = 0.5
+
+
+        const model = new THREE.Mesh(
+            new THREE.BoxGeometry(1, 1, 3),
+            material
+        )
+
+        model.castShadow = true
+        model.receiveShadow = true
 
         return model
     }
@@ -37,35 +41,34 @@ class Wall {
     }
 
     update () {
-        this.mesh.scale.x = Math.abs(Math.sin(this.experience.time.elapsed/1000))/5 + 1
-        this.mesh.scale.y = Math.abs(Math.sin(this.experience.time.elapsed/1000))/5 + 1
-        this.mesh.scale.z = Math.abs(Math.sin(this.experience.time.elapsed/1000))/5 + 1
+        return
     }
 }
 
 export default class Walls {
     constructor () {
         this.experience = new Experience()
-        this.resources = this.experience.resources
         const objectHeight = 0.5
 
-        const plankton_1_position = new THREE.Vector3(0, objectHeight, -4)
-        const plankton_2_position = new THREE.Vector3(0, objectHeight, -8)
+        const wall_1_position = new THREE.Vector3(0, objectHeight, 0)
+        const wall_2_position = new THREE.Vector3(0, objectHeight, -12)
 
-        const plankton_1_rotation = new THREE.Euler(0, -Math.PI/2, 0)
-        const plankton_2_rotation = new THREE.Euler(0, Math.PI/2, 0)
+        const wall_1_rotation = new THREE.Euler(0, Math.PI/2, 0)
+        const wall_2_rotation = new THREE.Euler(0, Math.PI/2, 0)
 
-        this.plankton_1_object = new Plankton(plankton_1_position, plankton_1_rotation, this.resources.items.plankton1Model)
-        this.plankton_2_object = new Plankton(plankton_2_position, plankton_2_rotation, this.resources.items.plankton1Model)
 
-        this.experience.scene.add(this.plankton_1_object.mesh)
-        this.experience.scene.add(this.plankton_2_object.mesh)
+        this.wall_1_object = new Wall(wall_1_position, wall_1_rotation)
+        this.wall_2_object = new Wall(wall_2_position, wall_2_rotation)
+
+        this.experience.scene.add(this.wall_1_object.mesh)
+        this.experience.scene.add(this.wall_2_object.mesh)
+
     }
 
     getAllInstances() {
         return [
-            this.plankton_1_object,
-            this.plankton_2_object
+            this.wall_1_object,
+            this.wall_2_object
         ]
     }
 
@@ -84,7 +87,7 @@ export default class Walls {
     }
 
     update () {
-        this.plankton_1_object.update()
-        this.plankton_2_object.update()
+        this.wall_1_object.update()
+        this.wall_2_object.update()
     }
 }

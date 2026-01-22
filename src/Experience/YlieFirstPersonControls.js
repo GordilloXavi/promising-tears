@@ -29,7 +29,7 @@ export default class YlieFirstPersonControls
         this.sprinting = false
         this.justBeganSprinting = false
         this.sprintTime = 0
-        this.initialCameraHeight = 1
+        this.initialCameraHeight = 0.5
 
         this.rayCaster = new THREE.Raycaster()
 
@@ -41,8 +41,8 @@ export default class YlieFirstPersonControls
     }
 
     lock() {
-        this.controls.lock()
-        this.enterFullscreen()
+        //this.controls.lock()
+        //this.enterFullscreen()
     }
 
     isFullScreen () {

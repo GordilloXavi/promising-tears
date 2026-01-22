@@ -48,9 +48,9 @@ class Plankton {
     }
 
     update () {
-        this.mesh.scale.x = Math.abs(Math.sin(this.experience.time.elapsed/1000))/5 + 1
-        this.mesh.scale.y = Math.abs(Math.sin(this.experience.time.elapsed/1000))/5 + 1
-        this.mesh.scale.z = Math.abs(Math.sin(this.experience.time.elapsed/1000))/5 + 1
+        this.mesh.scale.x = Math.abs(Math.sin(this.experience.time.elapsed/1000))/20 + 1
+        this.mesh.scale.y = Math.abs(Math.sin(this.experience.time.elapsed/1000))/20 + 1
+        this.mesh.scale.z = Math.abs(Math.sin(this.experience.time.elapsed/1000))/20 + 1
     }
 }
 
