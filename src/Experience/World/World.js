@@ -20,7 +20,7 @@ export default class World
             // Setup
             this.waterFloor = new WaterFloor()
             this.PlanktonGroup = new PlanktonGroup()
-            this.Walls = new Walls()
+            //this.Walls = new Walls()
 
             this.envMap = this.resources.items.skyEnvMap
             this.envMap.mapping = THREE.EquirectangularReflectionMapping

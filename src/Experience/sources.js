@@ -13,5 +13,10 @@ export default [
         name: 'plankton1Model',
         type: 'gltfModel',
         path: 'models/plankton1.glb'
+    },
+    {
+        name: 'FallingLeaves',
+        type: 'gltfModel',
+        path: 'models/leaves.glb'
     }
 ]
