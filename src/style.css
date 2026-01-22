@@ -4,6 +4,14 @@
     padding: 0;
 }
 
+@font-face {
+    font-family: "Goofy";
+    src: url("/fonts/goofy.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 html,
 body
 {
@@ -30,15 +38,27 @@ body
     padding: 0 16px;
     background-color: #f4f1ea;
     color: #1a1a1a;
-    font-family: monospace;
-    font-size: 14px;
+    font-family: "Goofy", monospace;
+    font-size: 26px;
     z-index: 10;
     box-sizing: border-box;
 }
 
 .bottom-bar__brand {
+    appearance: none;
+    border: 1px solid #bdb8aa;
+    background: #efe9dd;
+    color: inherit;
+    padding: 4px 12px;
+    font: inherit;
+    cursor: pointer;
     text-transform: lowercase;
     letter-spacing: 0.5px;
+}
+
+.bottom-bar__brand:focus-visible {
+    outline: 2px solid #7b8aa6;
+    outline-offset: 2px;
 }
 
 .bottom-bar__links {
@@ -53,6 +73,35 @@ body
 
 .bottom-bar__links a:hover {
     text-decoration: underline;
+}
+
+.bottom-bar__menu {
+    position: fixed;
+    left: 8px;
+    bottom: 44px;
+    min-width: 220px;
+    background: #f4f1ea;
+    border: 1px solid #bdb8aa;
+    box-shadow: 2px 2px 0 #9e9a8f;
+    padding: 6px 0;
+    display: none;
+    z-index: 20;
+    font-family: "Goofy", monospace;
+}
+
+.bottom-bar__menu.is-open {
+    display: flex;
+    flex-direction: column;
+}
+
+.bottom-bar__menu a {
+    padding: 6px 14px;
+    color: #1a1a1a;
+    text-decoration: none;
+}
+
+.bottom-bar__menu a:hover {
+    background: #e6dfd2;
 }
 
 #nameOverlay {

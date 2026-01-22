@@ -10,11 +10,16 @@
 <body>
     <canvas id="threeCanvas" class="webgl"></canvas>
     <footer class="bottom-bar">
-        <div class="bottom-bar__brand">promising tears</div>
+        <button class="bottom-bar__brand" id="bottomBarMenuButton" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="bottomBarMenu">
+            promising tears
+        </button>
         <nav class="bottom-bar__links" aria-label="Footer links">
             <a href="#cv">CV</a>
         </nav>
     </footer>
+    <div class="bottom-bar__menu" id="bottomBarMenu" role="menu" aria-label="Promising tears menu">
+        <a role="menuitem" href="#portfolio">video</a>
+    </div>
     <script type="module" src="./script.js"></script>
 </body>
 </html>
