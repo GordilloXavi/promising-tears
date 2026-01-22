@@ -9,6 +9,7 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import { FilmPass } from 'three/addons/postprocessing/FilmPass.js'
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js'
 
 // Debug
 const gui = new GUI()
@@ -63,7 +64,6 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 const scene = new THREE.Scene()
 
 //scene.fog = fog
-scene.background = new THREE.Color(0x00AA00)
 
 
 // Controls
@@ -103,12 +103,6 @@ const onKeyDown = function ( event ) {
         case 'KeyD':
             moveRight = true
             break
-        
-        case 'ShiftRight':
-        case 'ShiftLeft':
-            sprinting = true
-            justBeganSprinting = true
-            break
     }
 }
 
@@ -133,11 +127,6 @@ const onKeyUp = function ( event ) {
         case 'KeyD':
             moveRight = false
             break
-
-        case 'ShiftRight':
-        case 'ShiftLeft':
-            sprinting = false
-            break
     }
 }
 
@@ -150,42 +139,90 @@ document.addEventListener( 'keyup', onKeyUp )
 */
 
 // Env map
-let envMap;
-if (window.resources && window.resources.items && window.resources.items.skyEnvMap) {
-    envMap = window.resources.items.skyEnvMap;
-} else if (typeof resources !== 'undefined' && resources.items && resources.items.skyEnvMap) {
-    envMap = resources.items.skyEnvMap;
-}
-if (envMap) {
-    envMap.mapping = THREE.EquirectangularReflectionMapping;
-    scene.background = envMap;
-    scene.environment = envMap;
-    // For background/environment intensity, use renderer/exposure or materials, not properties on scene directly
-    renderer.toneMappingExposure = 0.7;
-}
+const pmremGenerator = new THREE.PMREMGenerator(renderer)
+pmremGenerator.compileEquirectangularShader()
+
+const cloudyHdrUrl = new URL('../static/cloudy.hdr', import.meta.url)
+new RGBELoader().load(cloudyHdrUrl, (texture) => {
+    texture.mapping = THREE.EquirectangularReflectionMapping
+    const envMap = pmremGenerator.fromEquirectangular(texture).texture
+
+    scene.background = texture
+    scene.environment = envMap
+    renderer.toneMappingExposure = 0.7
+
+    texture.dispose()
+    pmremGenerator.dispose()
+}, undefined, (error) => {
+    console.error('Failed to load HDR environment map:', error)
+})
+
 
 const crystalMaterial = new THREE.MeshPhysicalMaterial()
-crystalMaterial.color = new THREE.Color(0xffffff)
-crystalMaterial.metalness = 0
-crystalMaterial.roughness = 0.05
-crystalMaterial.transmission = 0.98
-crystalMaterial.ior = 1.6
-crystalMaterial.thickness = 0.1
+// Crystal material settings
+const crystalMaterialParams = {
+    color: '#ff0000',
+    metalness: 0,
+    roughness: 0.05,
+    transmission: 0.98,
+    ior: 1.6,
+    thickness: 0.1,
+}
+
+crystalMaterial.color = new THREE.Color(crystalMaterialParams.color)
+crystalMaterial.metalness = crystalMaterialParams.metalness
+crystalMaterial.roughness = crystalMaterialParams.roughness
+crystalMaterial.transmission = crystalMaterialParams.transmission
+crystalMaterial.ior = crystalMaterialParams.ior
+crystalMaterial.thickness = crystalMaterialParams.thickness
+
+const crystalGUIFolder = gui.addFolder('crystalMaterial')
+crystalGUIFolder.addColor(crystalMaterialParams, 'color').onChange(value => {
+    crystalMaterial.color.set(value)
+})
+crystalGUIFolder.add(crystalMaterialParams, 'metalness', 0, 1).onChange(value => {
+    crystalMaterial.metalness = value
+})
+crystalGUIFolder.add(crystalMaterialParams, 'roughness', 0, 1).onChange(value => {
+    crystalMaterial.roughness = value
+})
+crystalGUIFolder.add(crystalMaterialParams, 'transmission', 0, 1).onChange(value => {
+    crystalMaterial.transmission = value
+})
+crystalGUIFolder.add(crystalMaterialParams, 'ior', 1, 2.5).onChange(value => {
+    crystalMaterial.ior = value
+})
+crystalGUIFolder.add(crystalMaterialParams, 'thickness', 0, 1).onChange(value => {
+    crystalMaterial.thickness = value
+})
+
+crystalGUIFolder.close()
 
 
 const crystalCube = new THREE.Mesh(
-    new THREE.BoxGeometry(),
+    new THREE.BoxGeometry(10, 2, 1),
     crystalMaterial
 )
 
 crystalCube.castShadow = true
 crystalCube.receiveShadow = true
 
-crystalCube.position.x = 0
-crystalCube.position.y = 0
-crystalCube.position.z = -2
+crystalCube.position.set(0, 0, -5)
 scene.add(crystalCube)
 
+const crystalCube2 = crystalCube.clone()
+crystalCube2.position.set(0, 0, 5)
+scene.add(crystalCube2)
+
+const crystalCube3 = crystalCube.clone()
+crystalCube3.position.set(-5, 0, 0)
+crystalCube3.rotation.set(0, Math.PI/2, 0)
+scene.add(crystalCube3)
+
+const crystalCube4 = crystalCube.clone()
+crystalCube4.position.set(5, 0, 0)
+crystalCube4.rotation.set(0, Math.PI/2, 0)
+scene.add(crystalCube4)
 
 /**
  * Lights
@@ -219,7 +256,7 @@ window.addEventListener('resize', () =>
 let gameStarted = false
 document.addEventListener('click', () => {
     // Ignore clicks while still on the loading screen; allow relock after starting
-    if (gameStarted) return
+    //if (gameStarted) return
     gameStarted = true
     controls.lock()
 })
