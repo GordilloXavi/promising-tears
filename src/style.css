@@ -1,36 +1,5 @@
-@font-face {
-    font-family: "Agmena Pro";
-    src: url("/fonts/Agmena-Pro/Agmena Pro Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Agmena Pro";
-    src: url("/fonts/Agmena-Pro/Agmena Pro Italic.ttf") format("truetype");
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Agmena Pro";
-    src: url("/fonts/Agmena-Pro/Agmena Pro Bold.ttf") format("truetype");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Agmena Pro";
-    src: url("/fonts/Agmena-Pro/Agmena Pro Bold Italic.ttf") format("truetype");
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
-}
-
-*{
+*
+{
     margin: 0;
     padding: 0;
 }
@@ -38,10 +7,7 @@
 html,
 body
 {
-    width: 100%;
-    height: 100%;
     overflow: hidden;
-    font-family: "Agmena Pro", serif;
 }
 
 .webgl
@@ -52,267 +18,33 @@ body
     outline: none;
 }
 
-
-#blocker {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    backdrop-filter: blur(5px);
-}
-
-#loader {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    text-align: center;
-    font-family: "Agmena Pro", serif;
-
-    font-size: 120px;
-    color: white;
-    background-color: black;
-    cursor: default;
-}
-
-#loadingContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-#progressBarContainer {
-    width: 400px;
-    height: 4px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 2px;
-    overflow: hidden;
-}
-
-#progressBar {
-    width: 0%;
-    height: 100%;
-    background-color: white;
-    transition: width 0.3s ease;
-}
-
-#interactionMessage {
-    position: fixed;
-    left: 24px;
-    bottom: 24px;
-    font-family: "Agmena Pro", serif;
-    font-size: 20px;
-    color: white;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
-    pointer-events: none;
-    user-select: none;
-    display: none;
-    z-index: 120;
-}
-
-#startHint {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 24px clamp(40px, 12vw, 140px);
-    box-sizing: border-box;
-    gap: 6px;
-    font-family: "Agmena Pro", serif;
-    font-size: 18px;
-    color: white;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 1s ease;
-    z-index: 130;
-}
-
-#startHint.visible {
-    display: flex;
-    opacity: 1;
-}
-
-#startHint.fading {
-    opacity: 0;
-}
-
-.hint-line {
-    line-height: 1.4;
-}
-
-.poem-char {
-    opacity: 0;
-    display: inline-block;
-    animation: poemFade 0.6s forwards;
-}
-
-@keyframes poemFade {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-#inspectOverlay {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-    font-family: "Agmena Pro", serif;
-    z-index: 150;
-    padding: 24px;
-    box-sizing: border-box;
-}
-
-#inspectContent {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 720px;
-    line-height: 1.6;
-}
-
-.inspect-title {
-    font-size: 32px;
-    letter-spacing: 1px;
-}
-
-.inspect-body {
-    font-size: 18px;
-}
-
-.inspect-hint {
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.7);
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
-}
-
-#pause {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    text-align: left;
-    font-family: "Agmena Pro", serif;
-    color: #f7f7f7;
-    cursor: pointer;
-    padding: 24px clamp(40px, 12vw, 140px);
-    box-sizing: border-box;
-    background: transparent;
-    backdrop-filter: none;
-    opacity: 0;
-    transform: translateX(-8px);
-    pointer-events: none;
-    transition: opacity 140ms ease, transform 140ms ease;
-}
-
-#pause.visible {
-    opacity: 1;
-    transform: translateX(0);
-    pointer-events: auto;
-}
-
-#pause.closing {
-    animation: pauseOut 140ms ease-in forwards;
-}
-
-@keyframes pauseOut {
-    0% { opacity: 1; transform: translateX(0); }
-    100% { opacity: 0; transform: translateX(-8px); }
-}
-
-.pause-text {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.55);
-}
-
-.pause-title {
-    font-size: 36px;
-    letter-spacing: 0.8px;
-    margin-bottom: 4px;
-}
-
-.pause-line {
-    font-size: 18px;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.pause-footer {
-    font-size: 15px;
-    color: rgba(255, 255, 255, 0.75);
-    letter-spacing: 0.3px;
-    margin-top: 8px;
-}
-
-#FPSPointer {
-    display: none;
-}
-
-#mobileMessage {
+#nameOverlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: black;
-    display: none;
-    font-family: "Agmena Pro", serif;
-    flex-direction: column;
+    color: white;
+    display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
+    z-index: 1000;
+    font-family: monospace;
 }
 
-#mobileMessage p {
-    color: white;
-    font-family: "Agmena Pro", serif;
-    font-size: 24px;
-    text-align: center;
-    padding: 20px;
+#nameForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Show mobile message on mobile devices */
-@media (max-width: 768px) {
-    #mobileMessage {
-        display: flex;
-    }
-    
-    .webgl {
-        display: none;
-    }
-    
-    #blocker {
-        display: none;
-    }
+label, input, button {
+    font-size: 20px;
+    margin: 10px;
+    font-family: monospace;
+}
+
+#threeCanvas {
+    display: none;
 }
