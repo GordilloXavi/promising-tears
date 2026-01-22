@@ -140,7 +140,6 @@ export class Player
                 if (!this.lastUpdateTime || currentTime - this.lastUpdateTime >= 50) {
                     this.lastUpdateTime = currentTime
                     console.log('sending player position')
-                    if (this.experience.socketMessenger) this.experience.socketMessenger.sendPlayerPositionUpdated(this)
                 }
             }
         } else if (this.mesh) {

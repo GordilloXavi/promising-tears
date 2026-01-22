@@ -9,7 +9,6 @@ import Renderer from './Renderer.js'
 import World from './World/World.js'
 import Resources from './Utils/Resources.js'
 import YlieFirstPersonControls from './YlieFirstPersonControls.js'
-import SocketMessenger from './SocketMessenger.js'
 
 import sources from './sources.js'
 
@@ -43,7 +42,6 @@ export default class Experience
         this.controls = new YlieFirstPersonControls()
         this.renderer = new Renderer()
         this.world = new World()
-        this.socketMessenger = null//new SocketMessenger()
 
         // Resize event
         this.sizes.on('resize', () =>
@@ -55,32 +53,6 @@ export default class Experience
         this.time.on('tick', () =>
         {
             this.update()
-        })
-    }
-
-    setupNameOverlay() {
-        const nameOverlay = document.getElementById('nameOverlay')
-        const nameForm = document.getElementById('nameForm')
-        const nameInput = document.getElementById('nameInput')
-        const canvas = document.getElementById('threeCanvas')
-
-        window.addEventListener('load', () => {
-            nameInput.focus()
-        })
-
-        // Form Submission
-        nameForm.addEventListener('submit', (e) => {
-            e.preventDefault()
-            this.playerName = nameInput.value.trim()
-            if (this.playerName.length > 0) {
-                this.controls.lock()
-                nameOverlay.style.display = 'none'
-                canvas.style.display = 'block'
-                this.state = GameState.PLAYING
-                this.world.selfPlayer.name = this.playerName
-                this.socketMessenger = new SocketMessenger()
-                this.world.stemObjectGroup.playAllSounds()
-            }
         })
     }
 
