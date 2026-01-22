@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js'
 import Experience from "../Experience"
 
 class LeavesModel {
@@ -6,37 +7,35 @@ class LeavesModel {
         this.experience = new Experience()
         this.camera = this.experience.camera.instance
         this.resources = this.experience.resources
+        this.time = this.experience.time
 
         this.model = model
 
         this.mesh = this.createMesh()
         this.mesh.position.set(position.x, position.y, position.z)
         this.mesh.rotation.set(rotation.x, rotation.y, rotation.z)
+
+        this.setAnimation()
     }
 
     createMesh () {
         const resource = this.model
-        const model = resource.scene.clone()
-
-        model.traverse((child) => {
-            if (child instanceof THREE.Mesh) {
-                child.material = child.material.clone()
-                const oldMaterial = child.material
-                const newMaterial = new THREE.MeshPhysicalMaterial({
-                    color: oldMaterial.color.clone(),
-                    map: oldMaterial.map,
-                    metalness: 1,
-                    roughness:0,
-                    opacity: oldMaterial.opacity,
-                })
-                newMaterial.clearcoat = 1.0
-                newMaterial.clearcoatRoughness = 0.1
-                child.material = newMaterial
-                
-            }
-        })
+        const model = SkeletonUtils.clone(resource.scene)
 
         return model
+    }
+
+    setAnimation () {
+        if (!this.model?.animations || this.model.animations.length === 0) {
+            this.animation = null
+            return
+        }
+
+        this.animation = {}
+        this.animation.mixer = new THREE.AnimationMixer(this.mesh)
+        this.animation.action = this.animation.mixer.clipAction(this.model.animations[0])
+        this.animation.action.setLoop(THREE.LoopRepeat, Infinity)
+        this.animation.action.play()
     }
 
     handleIntersections (rayCaster) {
@@ -48,7 +47,9 @@ class LeavesModel {
     }
 
     update () {
-        // update animation
+        if (this.animation?.mixer) {
+            this.animation.mixer.update(this.time.delta * 0.5)
+        }
     }
 }
 
@@ -57,7 +58,7 @@ export default class FallingLeaves {
         this.experience = new Experience()
         this.resources = this.experience.resources
 
-        const leaves_position = new THREE.Vector3(0, 0, -20)
+        const leaves_position = new THREE.Vector3(0, 0, -2)
 
         const leaves_rotation = new THREE.Euler(0, 0, 0)
 

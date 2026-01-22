@@ -25,12 +25,12 @@ class Plankton {
                 const newMaterial = new THREE.MeshPhysicalMaterial({
                     color: oldMaterial.color.clone(),
                     map: oldMaterial.map,
-                    metalness: 1,
+                    metalness: 2, // Add glow by increasing this number
                     roughness:0,
                     opacity: oldMaterial.opacity,
                 })
                 newMaterial.clearcoat = 1.0
-                newMaterial.clearcoatRoughness = 0.1
+                newMaterial.clearcoatRoughness = -5.0
                 child.material = newMaterial
                 
             }
@@ -60,7 +60,7 @@ export default class PlanktonGroup {
         this.resources = this.experience.resources
         const objectHeight = 0.5
 
-        const plankton_1_position = new THREE.Vector3(0, objectHeight, -4)
+        const plankton_1_position = new THREE.Vector3(0, objectHeight, -3)
         const plankton_2_position = new THREE.Vector3(0, objectHeight, -8)
 
         const plankton_1_rotation = new THREE.Euler(0, -Math.PI/2, 0)

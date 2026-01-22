@@ -14,11 +14,11 @@ class Wall {
     createMesh () {
         const material = new THREE.MeshPhysicalMaterial()
         material.color = new THREE.Color(0xffffff)
-        material.metalness = 0
+        material.metalness = 1.2
         material.roughness = 0.05
-        material.transmission = 0.98
-        material.ior = 1.6
-        material.thickness = 0.1
+        material.transmission = 1.0
+        material.ior = 1.3
+        material.thickness = 1.7
 
 
         const model = new THREE.Mesh(
