@@ -45,7 +45,15 @@ export default class World
     {
         if (this.players)
             this.players.update()
-        this.rayCaster.setFromCamera(new THREE.Vector2(0, 0), this.camera)
+        
+        let raycasterCoords = new THREE.Vector2(0, 0)
+        if (this.experience.controls && this.experience.controls.cursor) {
+            // Convert from -0.5..0.5 to -1..1
+            raycasterCoords.x = this.experience.controls.cursor.x * 2
+            raycasterCoords.y = - this.experience.controls.cursor.y * 2
+        }
+        this.rayCaster.setFromCamera(raycasterCoords, this.camera)
+
         this.handleIntersections()
         if (this.waterFloor)
             this.waterFloor.update()

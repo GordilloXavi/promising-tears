@@ -61,10 +61,10 @@ export default class PlanktonGroup {
         const objectHeight = 0.5
 
         const plankton_1_position = new THREE.Vector3(0, objectHeight, -3)
-        const plankton_2_position = new THREE.Vector3(0, objectHeight, -8)
+        const plankton_2_position = new THREE.Vector3(5, objectHeight, -3)
 
         const plankton_1_rotation = new THREE.Euler(0, -Math.PI/2, 0)
-        const plankton_2_rotation = new THREE.Euler(0, Math.PI/2, 0)
+        const plankton_2_rotation = new THREE.Euler(0, -Math.PI/2, 0)
 
         this.plankton_1_object = new Plankton(plankton_1_position, plankton_1_rotation, this.resources.items.plankton1Model)
         this.plankton_2_object = new Plankton(plankton_2_position, plankton_2_rotation, this.resources.items.plankton1Model)
