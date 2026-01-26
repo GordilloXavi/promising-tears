@@ -23,7 +23,7 @@ export default class CursorControls
         this.camera.rotation.set(0, 0, 0)
 
         // Event listener
-        window.addEventListener('mousemove', (event) =>
+        window.addEventListener('pointermove', (event) =>
         {
             this.cursor.x = event.clientX / this.sizes.width - 0.5
             this.cursor.y = event.clientY / this.sizes.height - 0.5
@@ -31,6 +31,12 @@ export default class CursorControls
             // Update mouse for raycasting (normalized device coordinates)
             this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1
             this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1
+
+            // Check hover intersections only on pointer move
+            this.raycaster.setFromCamera(this.mouse, this.camera)
+            if(this.experience.world) {
+                this.experience.world.handleIntersections(this.raycaster)
+            }
         })
 
         // Handle click delegation (preserving previous behavior logic)
@@ -53,11 +59,5 @@ export default class CursorControls
         // Smoothly interpolate
         this.camera.rotation.x += (targetRotationX - this.camera.rotation.x) * this.damping
         this.camera.rotation.y += (targetRotationY - this.camera.rotation.y) * this.damping
-
-        // Update raycaster and check for hover intersections
-        this.raycaster.setFromCamera(this.mouse, this.camera)
-        if(this.experience.world) {
-            this.experience.world.handleIntersections(this.raycaster)
-        }
     }
 }

@@ -30,6 +30,7 @@ class Plankton {
 
         // Create bounding sphere for fast hover detection
         this.boundingSphere = new THREE.Sphere()
+        this.intersectPoint = new THREE.Vector3() // Reusable vector for intersection
         this.updateBoundingSphere()
     }
 
@@ -66,8 +67,14 @@ class Plankton {
     }
 
     handleIntersections (rayCaster) {
-        // Use bounding sphere for fast intersection test
-        this.isHovered = rayCaster.ray.intersectsSphere(this.boundingSphere)
+        // Use bounding sphere for fast intersection test with distance check
+        const hit = rayCaster.ray.intersectSphere(this.boundingSphere, this.intersectPoint)
+        if (hit) {
+            const distance = rayCaster.ray.origin.distanceTo(this.intersectPoint)
+            this.isHovered = distance < 4
+        } else {
+            this.isHovered = false
+        }
     }
 
     handleClick (event) {
@@ -107,6 +114,26 @@ export default class PlanktonGroup {
 
         this.experience.scene.add(this.plankton_1_object.mesh)
         this.experience.scene.add(this.plankton_2_object.mesh)
+
+        // Create tooltip element
+        this.tooltip = document.createElement('div')
+        this.tooltip.className = 'plankton-tooltip'
+        this.tooltip.textContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.'
+        document.body.appendChild(this.tooltip)
+
+        // Track cursor position for tooltip
+        this.cursorX = 0
+        this.cursorY = 0
+        window.addEventListener('pointermove', (e) => {
+            this.cursorX = e.clientX
+            this.cursorY = e.clientY
+            this.updateTooltipPosition()
+        })
+    }
+
+    updateTooltipPosition() {
+        this.tooltip.style.left = this.cursorX + 'px'
+        this.tooltip.style.top = this.cursorY + 'px'
     }
 
     getAllInstances() {
@@ -117,15 +144,22 @@ export default class PlanktonGroup {
     }
 
     handleIntersections(rayCaster) {
-        let instances = this.getAllInstances()
-        instances.forEach((instance, index) => {
+        let anyHovered = false
+        this.getAllInstances().forEach((instance) => {
             instance.handleIntersections(rayCaster)
+            if (instance.isHovered) anyHovered = true
         })
+
+        // Show/hide tooltip based on hover state
+        if (anyHovered) {
+            this.tooltip.classList.add('visible')
+        } else {
+            this.tooltip.classList.remove('visible')
+        }
     }
 
     handleClick (event) {
-        let instances = this.getAllInstances()
-        instances.forEach((instance, index) => {
+        this.getAllInstances().forEach((instance, index) => {
             instance.handleClick(event)
         })
     }
