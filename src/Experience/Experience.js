@@ -45,9 +45,9 @@ export default class Experience
         this.world = new World()
 
         // FPS counter
-        this.stats = new Stats()
-        this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb
-        document.body.appendChild(this.stats.dom)
+        //this.stats = new Stats()
+        //this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb
+        //document.body.appendChild(this.stats.dom)
 
         // Resize event
         this.sizes.on('resize', () =>
@@ -70,13 +70,13 @@ export default class Experience
 
     update()
     {
-        this.stats.begin()
+        if (this.stats) this.stats.begin()
         
         this.controls.update()
         this.world.update()
         this.renderer.update()
         
-        this.stats.end()
+        if (this.stats) this.stats.end()
     }
 
     destroy()
