@@ -2,11 +2,12 @@
 {
     margin: 0;
     padding: 0;
+    cursor: url('/cursor/cursor_32.png'), auto;
 }
 
 @font-face {
     font-family: "Goofy";
-    src: url("/fonts/goofy.ttf") format("truetype");
+    src: url("/fonts/soul.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -51,7 +52,6 @@ body
     color: inherit;
     padding: 4px 12px;
     font: inherit;
-    cursor: pointer;
     text-transform: lowercase;
     letter-spacing: 0.5px;
 }
@@ -77,11 +77,12 @@ body
 
 .bottom-bar__menu {
     position: fixed;
-    left: 8px;
+    left: 0;
     bottom: 44px;
     min-width: 220px;
     background: #f4f1ea;
     border: 1px solid #bdb8aa;
+    border-left: none;
     box-shadow: 2px 2px 0 #9e9a8f;
     padding: 6px 0;
     display: none;
