@@ -17,8 +17,23 @@ export default class Renderer
         this.sizes = this.experience.sizes
         this.scene = this.experience.scene
         this.camera = this.experience.camera
+        this.time = this.experience.time
 
         this.postProcessingEnabled = true
+
+        // Bloom target values (normal state)
+        this.bloomTargetStrength = 0.2 // 0.2
+        this.bloomTargetRadius = 0.49 // 0.05
+        this.bloomTargetThreshold = 0.005 // 0.01
+
+        // Bloom entry effect values (bright/overexposed)
+        this.bloomEntryStrength = 1.5
+        this.bloomEntryRadius = 1.2
+        this.bloomEntryThreshold = 0.0
+
+        // Animation state
+        this.isAnimatingEntry = false
+        this.entryAnimationSpeed = 6.0 // How fast the transition happens
 
         this.setInstance()
     }
@@ -53,15 +68,15 @@ export default class Renderer
         this.effectComposer.addPass(new RenderPass(this.scene, this.camera.instance))
 
         
-        const unrealBloomPass = new UnrealBloomPass(
+        this.unrealBloomPass = new UnrealBloomPass(
             new THREE.Vector2(window.innerWidth, window.innerHeight),
-            0.35, // strength 0.2
-            0.49, // radius 0.05
-            0.005 // threshold 0.01
+            this.bloomTargetStrength,
+            this.bloomTargetRadius,
+            this.bloomTargetThreshold
         )
-        unrealBloomPass.renderToScreen = true
+        this.unrealBloomPass.renderToScreen = true
 
-        this.effectComposer.addPass(unrealBloomPass)
+        this.effectComposer.addPass(this.unrealBloomPass)
         
         const effectFilm = new FilmPass( 0.1, false )
         this.effectComposer.addPass(effectFilm)
@@ -82,8 +97,59 @@ export default class Renderer
         this.effectComposer.setPixelRatio(this.sizes.pixelRatio)
     }
 
+    /**
+     * Trigger the entry effect - bloom starts at full intensity
+     * and smoothly transitions back to normal values
+     */
+    enter()
+    {
+        // Set bloom to entry values (overexposed/bright)
+        this.unrealBloomPass.strength = this.bloomEntryStrength
+        this.unrealBloomPass.radius = this.bloomEntryRadius
+        this.unrealBloomPass.threshold = this.bloomEntryThreshold
+
+        // Start the animation
+        this.isAnimatingEntry = true
+    }
+
     update()
     {
+        // Animate bloom entry effect
+        if (this.isAnimatingEntry)
+        {
+            const lerpFactor = 1.0 - Math.exp(-this.entryAnimationSpeed * this.time.delta)
+
+            this.unrealBloomPass.strength = THREE.MathUtils.lerp(
+                this.unrealBloomPass.strength,
+                this.bloomTargetStrength,
+                lerpFactor
+            )
+            this.unrealBloomPass.radius = THREE.MathUtils.lerp(
+                this.unrealBloomPass.radius,
+                this.bloomTargetRadius,
+                lerpFactor
+            )
+            this.unrealBloomPass.threshold = THREE.MathUtils.lerp(
+                this.unrealBloomPass.threshold,
+                this.bloomTargetThreshold,
+                lerpFactor
+            )
+
+            // Check if animation is complete (values are close enough to target)
+            const strengthDiff = Math.abs(this.unrealBloomPass.strength - this.bloomTargetStrength)
+            const radiusDiff = Math.abs(this.unrealBloomPass.radius - this.bloomTargetRadius)
+            const thresholdDiff = Math.abs(this.unrealBloomPass.threshold - this.bloomTargetThreshold)
+
+            if (strengthDiff < 0.001 && radiusDiff < 0.001 && thresholdDiff < 0.0001)
+            {
+                // Snap to final values and stop animation
+                this.unrealBloomPass.strength = this.bloomTargetStrength
+                this.unrealBloomPass.radius = this.bloomTargetRadius
+                this.unrealBloomPass.threshold = this.bloomTargetThreshold
+                this.isAnimatingEntry = false
+            }
+        }
+
         if (this.postProcessingEnabled) {
             this.effectComposer.render()
         } else {

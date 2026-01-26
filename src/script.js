@@ -22,6 +22,7 @@ if (experience.resources.loaded === experience.resources.toLoad) {
 
 enterButton.addEventListener('click', () => {
     loadingScreen.style.display = 'none'
+    experience.renderer.enter()
 })
 
 const menuButton = document.getElementById('bottomBarMenuButton')
