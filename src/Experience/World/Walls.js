@@ -26,8 +26,8 @@ class Wall {
             material
         )
 
-        model.castShadow = true
-        model.receiveShadow = true
+        model.castShadow = false
+        model.receiveShadow = false
 
         return model
     }
