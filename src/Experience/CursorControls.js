@@ -14,6 +14,10 @@ export default class CursorControls
         this.sensitivity = 0.4 // Adjust range of motion [default 0.5]
         this.damping = 0.05 // Smoothing factor [default 0.05]
 
+        // Raycaster for hover detection
+        this.raycaster = new THREE.Raycaster()
+        this.mouse = new THREE.Vector2()
+
         // Initial fixed position (preserving height from previous controls)
         this.camera.position.set(0, 0.5, 0)
         this.camera.rotation.set(0, 0, 0)
@@ -23,6 +27,10 @@ export default class CursorControls
         {
             this.cursor.x = event.clientX / this.sizes.width - 0.5
             this.cursor.y = event.clientY / this.sizes.height - 0.5
+
+            // Update mouse for raycasting (normalized device coordinates)
+            this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1
+            this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1
         })
 
         // Handle click delegation (preserving previous behavior logic)
@@ -45,5 +53,11 @@ export default class CursorControls
         // Smoothly interpolate
         this.camera.rotation.x += (targetRotationX - this.camera.rotation.x) * this.damping
         this.camera.rotation.y += (targetRotationY - this.camera.rotation.y) * this.damping
+
+        // Update raycaster and check for hover intersections
+        this.raycaster.setFromCamera(this.mouse, this.camera)
+        if(this.experience.world) {
+            this.experience.world.handleIntersections(this.raycaster)
+        }
     }
 }

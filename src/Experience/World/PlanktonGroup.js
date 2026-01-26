@@ -9,9 +9,35 @@ class Plankton {
 
         this.model = model
 
+        // Hover state for smooth metalness transition
+        this.isHovered = false
+        this.currentMetalness = 2
+        this.defaultMetalness = 2
+        this.targetMetalness = 3
+        this.transitionSpeed = 0.1
+
         this.mesh = this.createMesh()
         this.mesh.position.set(position.x, position.y, position.z)
         this.mesh.rotation.set(rotation.x, rotation.y, rotation.z)
+
+        // Cache meshes for metalness updates
+        this.childMeshes = []
+        this.mesh.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                this.childMeshes.push(child)
+            }
+        })
+
+        // Create bounding sphere for fast hover detection
+        this.boundingSphere = new THREE.Sphere()
+        this.updateBoundingSphere()
+    }
+
+    updateBoundingSphere() {
+        // Compute bounding box then create sphere from it
+        const box = new THREE.Box3().setFromObject(this.mesh)
+        box.getBoundingSphere(this.boundingSphere)
+        this.boundingSphere.radius = 0.5
     }
 
     createMesh () {
@@ -40,7 +66,8 @@ class Plankton {
     }
 
     handleIntersections (rayCaster) {
-        return
+        // Use bounding sphere for fast intersection test
+        this.isHovered = rayCaster.ray.intersectsSphere(this.boundingSphere)
     }
 
     handleClick (event) {
@@ -51,6 +78,15 @@ class Plankton {
         this.mesh.scale.x = Math.abs(Math.sin(this.experience.time.elapsed/1000))/20 + 1
         this.mesh.scale.y = Math.abs(Math.sin(this.experience.time.elapsed/1000))/20 + 1
         this.mesh.scale.z = Math.abs(Math.sin(this.experience.time.elapsed/1000))/20 + 1
+
+        // Smooth metalness transition on hover
+        const targetValue = this.isHovered ? this.targetMetalness : this.defaultMetalness
+        this.currentMetalness += (targetValue - this.currentMetalness) * this.transitionSpeed
+
+        // Apply metalness to cached meshes
+        for (let i = 0; i < this.childMeshes.length; i++) {
+            this.childMeshes[i].material.metalness = this.currentMetalness
+        }
     }
 }
 
