@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import Stats from 'three/addons/libs/stats.module.js'
 
 import Debug from './Utils/Debug.js'
 import Sizes from './Utils/Sizes.js'
@@ -43,6 +44,11 @@ export default class Experience
         this.renderer = new Renderer()
         this.world = new World()
 
+        // FPS counter
+        this.stats = new Stats()
+        this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb
+        document.body.appendChild(this.stats.dom)
+
         // Resize event
         this.sizes.on('resize', () =>
         {
@@ -64,9 +70,13 @@ export default class Experience
 
     update()
     {
+        this.stats.begin()
+        
         this.controls.update()
         this.world.update()
         this.renderer.update()
+        
+        this.stats.end()
     }
 
     destroy()
@@ -100,5 +110,9 @@ export default class Experience
 
         if(this.debug.active)
             this.debug.ui.destroy()
+
+        // Remove stats
+        if(this.stats.dom.parentElement)
+            this.stats.dom.parentElement.removeChild(this.stats.dom)
     }
 }

@@ -21,7 +21,7 @@ export default class World
             // Setup
             this.waterFloor = new WaterFloor()
             this.PlanktonGroup = new PlanktonGroup()
-            this.Walls = new Walls()
+            //this.Walls = new Walls()
             this.FallingLeaves = new FallingLeaves()
 
             this.envMap = this.resources.items.skyEnvMap
