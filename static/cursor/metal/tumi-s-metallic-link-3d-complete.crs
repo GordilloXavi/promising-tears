@@ -1,0 +1,45 @@
+﻿[UpArrow]
+Path=Tumi's 3D Metallic Alternate.ani
+
+[Wait]
+Path=Tumi's 3D Metallic Busy.ani
+
+[NWPen]
+Path=Tumi's 3D Metallic Handwriting.ani
+
+[SizeNWSE]
+Path=Tumi's 3D Metallic Diagonal1.ani
+
+[SizeNESW]
+Path=Tumi's 3D Metallic Diagonal2.ani
+
+[Help]
+Path=Tumi's 3D Metallic Help.ani
+
+[SizeWE]
+Path=Tumi's 3D Metallic Horizontal.ani
+
+[Hand]
+Path=Tumi's 3D Metallic Link.ani
+
+[SizeAll]
+Path=Tumi's 3D Metallic Move.ani
+
+[Arrow]
+Path=Tumi's 3D Metallic Normal.ani
+
+[Crosshair]
+Path=Tumi's 3D Metallic Precision.ani
+
+[IBeam]
+Path=Tumi's 3D Metallic Text.ani
+
+[No]
+Path=Tumi's 3D Metallic Unavailable.ani
+
+[SizeNS]
+Path=Tumi's 3D Metallic Vertical.ani
+
+[AppStarting]
+Path=Tumi's 3D Metallic Working.ani
+
