@@ -11,8 +11,8 @@ export default class CursorControls
         
         // Parameters
         this.cursor = { x: 0, y: 0 }
-        this.sensitivity = 0.5 // Adjust range of motion
-        this.damping = 0.05 // Smoothing factor
+        this.sensitivity = 0.4 // Adjust range of motion [default 0.5]
+        this.damping = 0.05 // Smoothing factor [default 0.05]
 
         // Initial fixed position (preserving height from previous controls)
         this.camera.position.set(0, 0.5, 0)

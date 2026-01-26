@@ -7,7 +7,7 @@
 
 @font-face {
     font-family: "Goofy";
-    src: url("/fonts/soul.ttf") format("truetype");
+    src: url("/fonts/goofy.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -134,4 +134,59 @@ label, input, button {
 
 #threeCanvas {
     display: block;
+}
+
+/* Loading Screen */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f4f1ea;
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Goofy", monospace;
+    font-size: 40px;
+    color: #1a1a1a;
+    flex-direction: column;
+    user-select: none;
+}
+
+#loading-dots::after {
+    content: '';
+    animation: dots 2s infinite;
+    display: inline-block;
+    width: 1.5em; /* Reserve space for 3 dots */
+    text-align: left;
+}
+
+@keyframes dots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+}
+
+#enter-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s;
+}
+
+.arrow {
+    position: absolute;
+    right: 100%;
+    margin-right: 15px;
+    opacity: 0;
+    font-size: 0.8em;
+    transition: opacity 0.3s;
+}
+
+#enter-button:hover .arrow {
+    opacity: 1;
 }
