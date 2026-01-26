@@ -13,6 +13,14 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: "Soul";
+    src: url("/fonts/soul.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 html,
 body
 {
@@ -39,7 +47,7 @@ body
     padding: 0 16px;
     background-color: #f4f1ea;
     color: #1a1a1a;
-    font-family: "Goofy", monospace;
+    font-family: "Soul", monospace;
     font-size: 26px;
     z-index: 10;
     box-sizing: border-box;
@@ -87,7 +95,7 @@ body
     padding: 6px 0;
     display: none;
     z-index: 20;
-    font-family: "Goofy", monospace;
+    font-family: "Soul", monospace;
 }
 
 .bottom-bar__menu.is-open {
